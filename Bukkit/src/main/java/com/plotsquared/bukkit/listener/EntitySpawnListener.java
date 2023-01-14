@@ -33,6 +33,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -40,6 +41,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.EntityTeleportEvent;
+import org.bukkit.event.entity.FireworkExplodeEvent;
 import org.bukkit.event.vehicle.VehicleBlockCollisionEvent;
 import org.bukkit.event.vehicle.VehicleCreateEvent;
 import org.bukkit.event.vehicle.VehicleMoveEvent;
@@ -115,6 +117,20 @@ public class EntitySpawnListener implements Listener {
         }
     }
 
+    @EventHandler
+    public void onFireworkExplosion(FireworkExplodeEvent event){
+        Entity entity = event.getEntity();
+
+        if(entity instanceof Firework) {
+            Location location = BukkitUtil.adapt(entity.getLocation());
+            if(!location.isPlotArea()) return;
+            if(!entity.hasMetadata("toBeRemoved")) return;
+            entity.remove();
+            event.setCancelled(true);
+            System.out.println("Cancel FireworkExplodeEvent");
+        }
+    }
+
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void creatureSpawnEvent(EntitySpawnEvent event) {
         Entity entity = event.getEntity();
@@ -123,9 +139,20 @@ public class EntitySpawnListener implements Listener {
         if (!location.isPlotArea()) {
             return;
         }
+
         Plot plot = location.getOwnedPlotAbs();
         EntityType type = entity.getType();
         if (plot == null) {
+
+            // Try to fix elytras for plotsquared
+            if(entity instanceof Firework) {
+                event.setCancelled(false);
+//                entity.setMetadata("toBeRemoved", new FixedMetadataValue(BukkitPlatform.getPlugin(BukkitPlatform.class), null));
+                System.out.println("EntitySpawnEvent attach \"toBeRemoved\"");
+                return;
+            }
+            // End of fix
+
             if (type == EntityType.DROPPED_ITEM) {
                 if (Settings.Enabled_Components.KILL_ROAD_ITEMS) {
                     event.setCancelled(true);
