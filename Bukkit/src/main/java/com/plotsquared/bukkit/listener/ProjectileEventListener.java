@@ -121,7 +121,6 @@ public class ProjectileEventListener implements Listener {
 
                     // Has eltrya attached
                     if(chestPlate != null && chestPlate.getType().equals(Material.ELYTRA)){
-                        System.out.println("Skip ProjectileLaunchEvent");
                         entity.setMetadata("toBeRemoved", new FixedMetadataValue(BukkitPlatform.getPlugin(BukkitPlatform.class), null));
                         event.setCancelled(false);
                         return;
@@ -178,7 +177,6 @@ public class ProjectileEventListener implements Listener {
 
                     // Has eltrya attached
                     if(chestPlate != null && chestPlate.getType().equals(Material.ELYTRA)){
-                        System.out.println("Skip ProjectileLaunchEvent");
                         entity.setMetadata("toBeRemoved", new FixedMetadataValue(BukkitPlatform.getPlugin(BukkitPlatform.class), null));
                         event.setCancelled(false);
                         return;

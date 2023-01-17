@@ -127,7 +127,6 @@ public class EntitySpawnListener implements Listener {
             if(!entity.hasMetadata("toBeRemoved")) return;
             entity.remove();
             event.setCancelled(true);
-            System.out.println("Cancel FireworkExplodeEvent");
         }
     }
 
@@ -147,8 +146,6 @@ public class EntitySpawnListener implements Listener {
             // Try to fix elytras for plotsquared
             if(entity instanceof Firework) {
                 event.setCancelled(false);
-//                entity.setMetadata("toBeRemoved", new FixedMetadataValue(BukkitPlatform.getPlugin(BukkitPlatform.class), null));
-                System.out.println("EntitySpawnEvent attach \"toBeRemoved\"");
                 return;
             }
             // End of fix
