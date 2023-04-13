@@ -174,7 +174,7 @@ public class ProjectileEventListener implements Listener {
                 entity.remove();
                 event.setCancelled(true);
                 return;
-            }
+            }// Test
 
             PlotPlayer<?> pp = BukkitUtil.adapt((Player) shooter);
             if (plot == null) {
